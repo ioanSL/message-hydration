@@ -2,3 +2,4 @@ contracts/message-hydrate/target
 contracts/message-hydrate/Cargo.lock
 node_modules
 package-lock.json
+.vscode
