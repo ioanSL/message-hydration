@@ -89,7 +89,6 @@ pub fn hydrate_message(
                 // For some reason, my msg does not get converted to binary in the next line.
                 // I tried different things and I was only able to do it if I use the function twice.
                 // That would be completerlly wrong in my opinion so here I think I'm missing something
-                // let binary_cw20_hydrated_message = to_binary(&cw20_hydrated_message)?.to_base64();
                 CosmosMsg::Wasm(WasmMsg::Execute { contract_addr, msg: to_json_binary(&cw20_hydrated_message)?, funds })
             },
             _ => todo!(), // Add here more cases
@@ -113,7 +112,6 @@ mod tests {
         let info = mock_info("creator", &coins(2, "token"));
         let _res = instantiate(deps.as_mut(), mock_env(), info, msg).unwrap();
 
-        // beneficiary can release it
         let info = mock_info("anyone", &coins(2, "token"));
         let msg = ExecuteMsg::HydrateMsg {
             input_msg: json!({
