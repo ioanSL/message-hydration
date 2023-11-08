@@ -88,7 +88,7 @@ pub fn hydrate_message(
                 // Returning CosmosMsg sturct with hydrated Wasm message
                 // For some reason, my msg does not get converted to binary in the next line.
                 // I tried different things and I was only able to do it if I use the function twice.
-                // That would be completerlly wrong in my opinion so here I think I'm missing something
+                // That would be completely wrong in my opinion so here I think I'm missing something
                 CosmosMsg::Wasm(WasmMsg::Execute { contract_addr, msg: to_json_binary(&cw20_hydrated_message)?, funds })
             },
             _ => todo!(), // Add here more cases
