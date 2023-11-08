@@ -61,14 +61,14 @@ pub fn hydrate_message(
         replace_variables(&mut input_msg, &var_list);
 
         // Create CosmosMsg struct from string
-        let wasm_msg: CosmosMsg = serde_json_wasm::from_str(&input_msg).unwrap();
+        let wasm_msg: CosmosMsg = serde_json_wasm::from_str(&input_msg).expect("Failed to decode CosmosMsg");
         
         let wasm_hydrated_msg: CosmosMsg = match wasm_msg {
             CosmosMsg::Wasm(WasmMsg::Execute {contract_addr, msg, funds} ) => {
                 // Looking for and replacing variable names within msg
                 // Inthis particular case there is nothing to replace but there can be a scenario
                 // where contract address or amount could be variables
-                let mut decoded_msg = String::from_utf8(msg.0).unwrap();
+                let mut decoded_msg = String::from_utf8(msg.0).expect("Failed to decode Cw20ExecuteMsg");
                 replace_variables(&mut decoded_msg, &var_list);
                 
                 // Create Send struct from slice
@@ -77,7 +77,7 @@ pub fn hydrate_message(
                 let cw20_hydrated_message = match cw20_message {
                     Cw20ExecuteMsg::Send {contract, amount, msg } => {
                         // Looking for and replacing variables within msg
-                        let mut decoded_msg = String::from_utf8(msg.0).unwrap();
+                        let mut decoded_msg = String::from_utf8(msg.0).expect("Failed to decode Cw20 msg field");
                         replace_variables(&mut decoded_msg, &var_list);
 
                         serde_json_wasm::to_string(&Cw20ExecuteMsg::Send {contract, amount, msg: to_json_binary(&decoded_msg)?}).unwrap()
