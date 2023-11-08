@@ -1,11 +1,11 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{to_json_binary, DepsMut, Env, MessageInfo, Response, StdResult, CosmosMsg, WasmMsg};
+use cosmwasm_std::{to_json_binary, Deps, Binary, DepsMut, Env, MessageInfo, Response, StdResult, CosmosMsg, WasmMsg};
 use cw2::set_contract_version;
 use serde_json_wasm;
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg};
+use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg};
 use crate::state::{State, STATE};
 use crate::vars::{get_variables_from_string, replace_variables};
 use cw20::Cw20ExecuteMsg;
@@ -48,6 +48,11 @@ pub fn execute(
     match msg {
         ExecuteMsg::HydrateMsg {input_msg, vars} => hydrate_message(deps, info, input_msg, vars),
     }
+}
+
+#[cfg_attr(not(feature = "library"), entry_point)]
+pub fn query(_deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
+    match msg {}
 }
 
 pub fn hydrate_message(
@@ -101,14 +106,14 @@ pub fn hydrate_message(
 mod tests {
     use super::*;
     use cosmwasm_std::testing::{mock_dependencies_with_balance, mock_env, mock_info};
-    use cosmwasm_std::coins;
+    use cosmwasm_std::{coins, Addr};
     use serde_json::json;
 
     #[test]
     fn test_hydrate() {
         let mut deps = mock_dependencies_with_balance(&coins(2, "token"));
 
-        let msg = InstantiateMsg { count: 17 };
+        let msg = InstantiateMsg { owner: Addr::unchecked("terra777") };
         let info = mock_info("creator", &coins(2, "token"));
         let _res = instantiate(deps.as_mut(), mock_env(), info, msg).unwrap();
 
