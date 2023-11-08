@@ -77,7 +77,7 @@ pub fn hydrate_message(
                 replace_variables(&mut decoded_msg, &var_list);
                 
                 // Create Send struct from slice
-                let cw20_message: Cw20ExecuteMsg = serde_json_wasm::from_str(&decoded_msg).unwrap();
+                let cw20_message: Cw20ExecuteMsg = serde_json_wasm::from_str(&decoded_msg).expect("Failed to parse Cw20ExecuteMsg");
                 
                 let cw20_hydrated_message = match cw20_message {
                     Cw20ExecuteMsg::Send {contract, amount, msg } => {
@@ -85,7 +85,7 @@ pub fn hydrate_message(
                         let mut decoded_msg = String::from_utf8(msg.0).expect("Failed to decode Cw20 msg field");
                         replace_variables(&mut decoded_msg, &var_list);
 
-                        serde_json_wasm::to_string(&Cw20ExecuteMsg::Send {contract, amount, msg: to_json_binary(&decoded_msg)?}).unwrap()
+                        serde_json_wasm::to_string(&Cw20ExecuteMsg::Send {contract, amount, msg: to_json_binary(&decoded_msg)?}).expect("Failed to encode Cw20ExecuteMsg::Send")
                         // Returning Send Cw20ExecuteMsg struct with hydrated Send message
                     },
                     _ => todo!(), // Add here more cases
