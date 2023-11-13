@@ -98,7 +98,10 @@ pub fn hydrate_message(
             },
             _ => todo!(), // Add here more cases
         };
-        Ok(Response::new().add_message(wasm_hydrated_msg))
+        Ok(Response::new()
+            .add_attribute("action", "hydrate_message")
+            .add_attribute("response", serde_json_wasm::to_string(&wasm_hydrated_msg).unwrap())
+        )
     }
 
 
