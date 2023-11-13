@@ -100,7 +100,7 @@ pub fn hydrate_message(
         };
         Ok(Response::new()
             .add_attribute("action", "hydrate_message")
-            .add_attribute("response", serde_json_wasm::to_string(&wasm_hydrated_msg).unwrap())
+            .add_attribute("response", serde_json_wasm::to_string(&wasm_hydrated_msg).expect("Failed to serialize CosmosMsg"))
         )
     }
 
@@ -136,14 +136,5 @@ mod tests {
         let res = execute(deps.as_mut(), mock_env(), info, msg).unwrap();
 
         println!("{:?}", res);
-
-        /*
-        This is how my response looks like
-        { messages: [SubMsg { id: 0, msg: Wasm(Execute 
-            { contract_addr: "terra12345", 
-            msg: "{\"send\":{\"contract\":\"terra54321\",\"amount\":\"12345\",\"msg\":\"IntcImV4ZWN1dGVfc3dhcF9vcGVyYXRpb25zXCI6e1wib3BlcmF0aW9uc1wiOlt7XCJhc3Ryb19zd2FwXCI6e1wib2ZmZXJfYXNzZXRfaW5mb1wiOntcInRva2VuXCI6e1wiY29udHJhY3RfYWRkclwiOlwidGVycmExMjM0NVwifX0sXCJhc2tfYXNzZXRfaW5mb1wiOntcIm5hdGl2ZV90b2tlblwiOntcImRlbm9tXCI6XCJ1dGVycmFcIn19fX1dLFwibWluaW11bV9yZWNlaXZlXCI6XCI1NDMyMVwiLFwidG9cIjpcInRlcnJhMTExMTFcIixcIm1heF9zcHJlYWRcIjpcIjAuMDVcIn19Ig==\"}}",
-            funds: [] 
-        }
-         */
     }
 }

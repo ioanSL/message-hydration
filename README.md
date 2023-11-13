@@ -21,3 +21,7 @@ Seems like converting to binary twice does the trick but is completelly wrong an
 What I believe I'm doing wrong is to convert the msg field (witch is type Binary) to String in line 71 and 80. This conversion is very convenient because I can easily replace the variable names with the correspondent value using the function replace_variables. But I think I shouldn't use this method and there might be a more efficient way to solve this.
 
 I've also tried to replace String::from_utf8 conversion from lines 71 and 80 but I get a conversion error every time.
+
+### November 13th update
+
+I had a look at the Warp code and I used the same method to return data within the response struct. Seems like the format matches but the encoded data no. Working on it...
